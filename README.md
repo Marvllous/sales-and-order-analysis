@@ -166,14 +166,12 @@ Restaurants lead. Supermarkets sit far below every other segment.
 
 **Reconsider**
 - Decide deliberately on the Supermarket segment: invest to grow it or accept it as minor. At 5.9% it should not stay a passive gap.
-- Investigate the nearly 20% of pending orders as a fulfilment question, separate from the revenue story.
-
+- Investigate the 49 pending orders. €2,326.50 of gross sales sits in this status, with no single channel or period standing out, which points to a process or reporting issue rather than a problem in one part of the business. Confirm whether these orders convert or lapse before treating them as revenue.
 ---
 
 ## Limitations
 
 - The dataset covers a single month (June 2026), so findings show one month's pattern, not a trend. Repeating the review monthly would confirm whether these patterns hold.
-- A small number of order records had missing status or category values and were treated as-is.
 - This is a training case study using a supplied dataset, not live commercial data.
 
 ---
