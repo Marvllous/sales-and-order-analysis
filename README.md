@@ -111,7 +111,7 @@ Every metric was segmented across five dimensions: day, county, channel, categor
 ## Key Findings
 
 ### Revenue rank is not profit rank
-Energy drinks are the smallest category by revenue at 11.3% of sales, yet they contain the single most profitable product in the range. **Energy Boost earns more profit per unit sold than any of the other 19 products**, including products in categories several times its size. The business is organised around revenue, but the profit picture points elsewhere.
+Energy drinks are the smallest category by revenue at 11.3% of sales, yet they contain the single most profitable product in the range. **Energy Boost earns more profit than any of the other 19 products**, including products in categories several times its size. The business is organised around revenue, but the profit picture points elsewhere.
 
 ### Phone dominates the channel mix
 | Channel | Revenue | Share |
