@@ -2,7 +2,7 @@
 
 Monthly sales and order analysis for an Irish beverage distributor, built in Excel. This project cleans and connects raw operational data, calculates commercial metrics, and turns them into a dashboard and findings that support management decisions.
 
-> Portfolio case study completed through the 10Alytics data analytics training programme. Dataset covers June 2026.
+> Portfolio case study using a supplied sales and order dataset. covers June 2026.
 
 ![Dashboard](emerald-dashboard.png)
 
