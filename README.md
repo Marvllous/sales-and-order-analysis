@@ -110,7 +110,7 @@ Cells changed by this pass:
 
 `Order_Status` went from 15 distinct spellings to 3: 195 Completed, 49 Pending, 6 Cancelled.
 
-Cleaned values were pasted over the source columns, so the finished tables carry values rather than formulas and the pivot cache reads static text.
+Cleaned values were pasted over the source columns, so the finished tables carry values instead of formulas and the pivot cache reads static text.
 
 ### 4. The cleaning step that changed a number
 
@@ -118,16 +118,16 @@ Cleaned values were pasted over the source columns, so the finished tables carry
 
 Left uncleaned, the dashboard shows six categories instead of five. Water reads €3,355.90 and 25.9% of revenue. A phantom `Wa ter` category sits below it holding €1,140.60.
 
-Cleaned, Water is €4,496.50 and 34.7% of revenue, the largest category in the business by a wide margin.
+Cleaned, Water is €4,496.50 and 34.7% of revenue, the largest category in the business.
 
-The uncleaned version does not look broken. It looks like a plausible chart with six bars. That is what makes this class of defect worth finding, and it is why `SUBSTITUTE` belongs in the cleaning set alongside `TRIM`.
+The broken version would not have looked broken. A chart with six categories instead of five raises no alarm, which is why this defect is worth catching.
 
 ### 5. Dates
 
 Order dates arrived as serial numbers and were converted to standard dates, then reduced to a day number for the daily trend and the day slicer:
 
 ```excel
-=DAY(Orders[[#This Row],[Order_Date]])
+=DAY([@Order_Date])
 ```
 
 ---
@@ -143,35 +143,35 @@ The `Orders` table is the spine. It starts as 7 source columns and finishes as 2
 Eight columns are pulled in with `XLOOKUP`, five from Products and three from Customers:
 
 ```excel
-Unit_Price        =XLOOKUP(Orders[[#This Row],[Product_ID]], Products[Product_ID], Products[Unit_Price])
-Cost_Price        =XLOOKUP(Orders[[#This Row],[Product_ID]], Products[Product_ID], Products[Cost_Price])
-Product_Name      =XLOOKUP(Orders[[#This Row],[Product_ID]], Products[Product_ID], Products[Product_Name])
-Category          =XLOOKUP(Orders[[#This Row],[Product_ID]], Products[Product_ID], Products[Category])
-Bottle_Size       =XLOOKUP(Orders[[#This Row],[Product_ID]], Products[Product_ID], Products[Bottle_Size])
-County            =XLOOKUP(Orders[[#This Row],[Customer_ID]], Customers[Customer_ID], Customers[County])
-Customer_Type     =XLOOKUP(Orders[[#This Row],[Customer_ID]], Customers[Customer_ID], Customers[Customer_Type])
-Preferred_Channel =XLOOKUP(Orders[[#This Row],[Customer_ID]], Customers[Customer_ID], Customers[Preferred_Channel])
+Unit_Price        =XLOOKUP([@Product_ID], Products[Product_ID], Products[Unit_Price])
+Cost_Price        =XLOOKUP([@Product_ID], Products[Product_ID], Products[Cost_Price])
+Product_Name      =XLOOKUP([@Product_ID], Products[Product_ID], Products[Product_Name])
+Category          =XLOOKUP([@Product_ID], Products[Product_ID], Products[Category])
+Bottle_Size       =XLOOKUP([@Product_ID], Products[Product_ID], Products[Bottle_Size])
+County            =XLOOKUP([@Customer_ID], Customers[Customer_ID], Customers[County])
+Customer_Type     =XLOOKUP([@Customer_ID], Customers[Customer_ID], Customers[Customer_Type])
+Preferred_Channel =XLOOKUP([@Customer_ID], Customers[Customer_ID], Customers[Preferred_Channel])
 ```
 
 That is 2,000 lookups across the table. `XLOOKUP` is used instead of `VLOOKUP` because it takes the lookup array and the return array as separate arguments, so it does not depend on column position and does not break when a column is inserted into Products or Customers.
 
-Structured references name the table and column instead of a cell range, which is what makes the formula identical in every row and readable a year later.
+Structured references name the table and column instead of a cell range. `[@Product_ID]` means the Product_ID value on this row, so the same formula works in every row and keeps working when a new order is added.
 
 ### The calculation layer
 
 ```excel
-Gross_Sales    =Orders[[#This Row],[Quantity]]*Orders[[#This Row],[Unit_Price]]
-Total_Cost     =Orders[[#This Row],[Cost_Price]]*Orders[[#This Row],[Quantity]]
-Total_Discount =Orders[[#This Row],[Unit_Price]]*Orders[[#This Row],[Discount]]*Orders[[#This Row],[Quantity]]
-Profit         =Orders[[#This Row],[Gross_Sales]]-Orders[[#This Row],[Total_Cost]]-Orders[[#This Row],[Total_Discount]]
-Overal Cost    =Orders[[#This Row],[Total_Cost]]+Orders[[#This Row],[Total_Discount]]
+Gross_Sales    =[@Quantity]*[@Unit_Price]
+Total_Cost     =[@Cost_Price]*[@Quantity]
+Total_Discount =[@Unit_Price]*[@Discount]*[@Quantity]
+Profit         =[@Gross_Sales]-[@Total_Cost]-[@Total_Discount]
+Overal Cost    =[@Total_Cost]+[@Total_Discount]
 ```
 
 `Overal Cost` combines product cost and discount given. It is the field behind the dashboard's `Total Cost` KPI and behind the cost bars on the product chart.
 
 ### The analysis sheet
 
-Segment lists are generated rather than typed, so they cannot drift from the data:
+Segment lists are generated by formula instead of typed by hand, so they cannot drift from the data:
 
 ```excel
 =UNIQUE(Orders[Category])
@@ -209,7 +209,7 @@ The median is used instead of the mean on purpose. Five categories with one domi
 
 ### The pivot and dashboard layer
 
-Seven pivot tables sit on a single shared cache, sourced from the `Orders` table rather than from a cell range. One cache means one refresh updates everything, and a new order row is picked up automatically.
+Seven pivot tables sit on a single shared cache, sourced from the `Orders` table instead of a cell range. One cache means one refresh updates everything, and a new order row is picked up automatically.
 
 | Pivot | Rows | Values |
 |---|---|---|
@@ -437,7 +437,7 @@ Line-level gross sales, cost, discount, profit and combined cost columns, each r
 `UNIQUE` to generate segment lists directly from the order table, so lists cannot drift from the data
 
 **Statistical banding**
-`IF` nested with `MEDIAN` to classify categories High, Medium and Low against the median rather than the mean
+`IF` nested with `MEDIAN` to classify categories High, Medium and Low against the median instead of the mean
 
 **PivotTables and dashboard build**
 Seven pivot tables on one shared cache sourced from a Table, four slicers cross-filtering every visual, `GETPIVOTDATA` linking KPI cards to pivot output, combined line and area chart, doughnut, bar charts and a filled region map
