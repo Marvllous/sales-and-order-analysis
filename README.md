@@ -409,7 +409,6 @@ Discounting is not light across the book. It is absent from two thirds of it and
 - **The `Total Cost` KPI on the dashboard reads `Overal Cost`, which includes discount.** The Key Findings table separates the two. Both reconcile to the same €5,759.11 profit.
 - **`PROPER` lower-cases the second capital in names like McCarthy.** This affects `Customer_Name` only, which is not used in any calculation or visual, so no figure is touched.
 - **Revenue per active customer is calculated across one month.** A customer who ordered twice in June and one who ordered once both count as one active customer.
-- **This is a training case study using a prepared dataset, not live commercial data.**
 
 ---
 
